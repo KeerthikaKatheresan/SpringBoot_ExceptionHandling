@@ -1,0 +1,100 @@
+Practice Question 1: Product Not Found Exception
+Problem
+
+Create a Spring Boot REST API for products.
+
+API
+GET /products/{id}
+Behavior
+
+1️⃣ If id = 1 → return
+
+Product Found
+
+2️⃣ If id is anything else → throw a custom exception
+
+Product not found with id: {id}
+Requirements
+
+You must create 3 classes
+
+1️⃣ Controller
+
+ProductController
+
+Endpoint:
+
+GET /products/{id}
+
+If id is not 1, throw exception.
+
+2️⃣ Custom Exception
+
+Class name:
+
+ProductNotFoundException
+
+Extend:
+
+RuntimeException
+3️⃣ Global Exception Handler
+
+Class name:
+
+GlobalExceptionHandler
+
+Use:
+
+@ControllerAdvice
+
+Handle:
+
+@ExceptionHandler(ProductNotFoundException.class)
+
+Return:
+
+HTTP Status: 404
+Body: Product not found with id: {id}
+
+Use ResponseEntity.
+
+Expected Output
+Request
+GET /products/5
+Response
+Product not found with id: 5
+
+Status:
+
+404 NOT FOUND
+--------------------------------------------------------------
+public class ProductNotFoundException extends RuntimeException{
+    ProductNotFoundException(String msg)
+    {
+        super(msg);
+    }
+}
+-------
+@RestController
+@RequestMapping("/product")
+public class ProductController{
+    @GetMapping("/{id}")
+    public String findById(@PathVariable int id)
+    {
+        if(id!=1)
+        {
+            throw new ProductNotFoundException("Sorry product is not available");
+        }
+        return "Product found";
+    }
+}
+-------------
+@ControllerAdvice
+public class GlobalExceptionHandler
+{
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<String> productNotFound(ProductNotFoundException ex)
+    {
+        return ResponseEntity.status(HTTPStatus_NOT_FOUND).body(ex.getMessage());
+    }
+}
