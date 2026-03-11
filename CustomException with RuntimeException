@@ -69,7 +69,7 @@ Status:
 404 NOT FOUND
 --------------------------------------------------------------
 public class ProductNotFoundException extends RuntimeException{
-    ProductNotFoundException(String msg)
+    public ProductNotFoundException(String msg)
     {
         super(msg);
     }
