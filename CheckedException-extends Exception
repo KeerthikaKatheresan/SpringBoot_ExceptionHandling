@@ -1,0 +1,33 @@
+public class AccountNotFoundException extends Exception{
+    public AccountNotFoundException(String msg)
+    {
+        super(msg);
+    }
+}
+@RestController
+@RequestMapping("/account")
+public class AccountController{
+    @GetMapping("/{id}")
+    public String findAccountById(@PathVariable int id)throws AccountNotFoundException
+    {
+        if(id!=100)
+        {
+            throw new AccountNotFoundException("Sorry account not found");
+        }
+        return "Account found";
+    }
+}
+@ControllerAdvice
+public class GlobalExceptionHandler
+{
+    @ExceptionHandler(AccountNotFoundException.class)
+    public ResponseEntity<String> accountNotFound(AccountNotFoundException ex)
+    {
+        return ResponseEntity.status(HTTPStatus.NOT_FOUND).body(ex.getMessage());
+    }
+}public class AccountNotFoundException extends Exception{
+    public AccountNotFoundException(String msg)
+    {
+        super(msg);
+    }
+}
