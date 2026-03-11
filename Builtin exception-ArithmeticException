@@ -1,0 +1,44 @@
+Next Practice Question (Slightly More Realistic)
+
+If you're interested, try this one:
+
+New Requirement
+
+Create API:
+
+GET /divide?a=10&b=0
+
+Return:
+
+a / b
+
+But if b = 0, throw exception.
+
+Handle using GlobalExceptionHandler and return:
+
+Cannot divide by zero
+Status: 400 BAD REQUEST
+----------------------------------------------------------------------------
+@RestController
+@RequestMapping("/divide")
+public class ArithmeticController
+{
+    @GetMapping()
+    public int divide(@RequestParam int a,@RequestParam int b)
+    {
+        if(b==0)
+        {
+            throw new ArithmeticException("Divide by Zero not possible");
+        }
+        return a/b;
+    }
+}
+-------------
+@ControllerAdvice
+public class GloablExceptionHandler {
+    @ExceptionHandler(ArithmticException.class)
+    public ResponseEntity<String> arithmeticException(ArithmeticEception ex)
+    {
+        return ResposneEntity.badRequest().body(ex.message());
+    }
+}
